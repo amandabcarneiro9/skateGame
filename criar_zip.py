@@ -3,9 +3,16 @@
 Script para criar o arquivo ZIP de entrega do jogo
 """
 import os
+import sys
 import zipfile
 import shutil
 from pathlib import Path
+
+# Configurar encoding para Windows
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 def criar_zip_entrega():
     """Cria o arquivo ZIP com o executável e assets"""
@@ -39,42 +46,42 @@ def criar_zip_entrega():
     
     # Copiar executável
     shutil.copy2(exe_path, temp_dir / "JogoSkate.exe")
-    print(f"  ✓ {exe_path.name}")
+    print(f"  [OK] {exe_path.name}")
     
     # Copiar requirements.txt (opcional, mas útil)
     if Path("requirements.txt").exists():
         shutil.copy2("requirements.txt", temp_dir / "requirements.txt")
-        print("  ✓ requirements.txt")
+        print("  [OK] requirements.txt")
     
     # Criar README.txt
     readme_content = """JOGO DE SKATE 2D
 ==================
 
-INSTRUÇÕES:
+INSTRUCOES:
 1. Execute o arquivo JogoSkate.exe
-2. Pressione ESPAÇO para começar
+2. Pressione ESPACO para comecar
 3. Use as setas para fazer manobras
-4. Desvie dos obstáculos e ganhe pontos!
+4. Desvie dos obstaculos e ganhe pontos!
 
 CONTROLES:
-- ESPAÇO/SETA CIMA: Ollie (Pulo)
+- ESPACO/SETA CIMA: Ollie (Pulo)
 - SETA ESQUERDA: Kickflip
-- SETA DIREITA: Heelflip  
-- SETA BAIXO: 360° Spin
+- SETA DIREITA: Heelflip
+- SETA BAIXO: 360 Spin
 
 DICAS:
 - Pouse em cima de barreiras ou rails para fazer grind!
-- Use as rampas para ganhar altura e fazer manobras incríveis!
+- Use as rampas para ganhar altura e fazer manobras incriveis!
 - Manobras feitas em rampas ganham +50% de pontos!
 
 REQUISITOS:
 - Windows 7 ou superior
-- Não requer instalação de Python
+- Nao requer instalacao de Python
 
 PROBLEMAS?
-Se o jogo não executar, tente:
+Se o jogo nao executar, tente:
 1. Executar como Administrador
-2. Verificar se o Windows Defender não está bloqueando
+2. Verificar se o Windows Defender nao esta bloqueando
 3. Executar via CMD para ver mensagens de erro
 
 Desenvolvido com Python e Pygame
@@ -82,7 +89,7 @@ Desenvolvido com Python e Pygame
     
     with open(temp_dir / "README.txt", "w", encoding="utf-8") as f:
         f.write(readme_content)
-    print("  ✓ README.txt")
+    print("  [OK] README.txt")
     
     # Criar arquivo ZIP
     print()
@@ -95,7 +102,7 @@ Desenvolvido com Python e Pygame
     with zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED) as zipf:
         for file in temp_dir.iterdir():
             zipf.write(file, file.name)
-            print(f"  ✓ Adicionado: {file.name}")
+            print(f"  [OK] Adicionado: {file.name}")
     
     # Limpar pasta temporária
     shutil.rmtree(temp_dir)
