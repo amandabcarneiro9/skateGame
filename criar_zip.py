@@ -48,6 +48,18 @@ def criar_zip_entrega():
     shutil.copy2(exe_path, temp_dir / "JogoSkate.exe")
     print(f"  [OK] {exe_path.name}")
     
+    # Copiar pasta assets (se existir)
+    assets_dir = Path("assets")
+    if assets_dir.exists() and assets_dir.is_dir():
+        # Copiar toda a pasta assets
+        dest_assets = temp_dir / "assets"
+        shutil.copytree(assets_dir, dest_assets, dirs_exist_ok=True)
+        print("  [OK] Pasta assets/ copiada")
+        # Listar arquivos copiados
+        for asset_file in dest_assets.iterdir():
+            if asset_file.is_file():
+                print(f"      - {asset_file.name}")
+    
     # Copiar requirements.txt (opcional, mas útil)
     if Path("requirements.txt").exists():
         shutil.copy2("requirements.txt", temp_dir / "requirements.txt")
